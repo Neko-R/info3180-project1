@@ -4,9 +4,10 @@ Jinja2 Documentation:    http://jinja.pocoo.org/2/documentation/
 Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
-
-from app import app
+from app import app, db
 from flask import render_template, request, redirect, url_for, flash, session, abort
+from forms import addProfile
+from models import UserProfile
 from werkzeug.utils import secure_filename
 import datetime
 from .forms import *
@@ -24,10 +25,26 @@ def profile():
     # Validate file upload on submit
     if request.method == 'POST':
         if myform.validate_on_submit():
-            f = myform.photo.data
+            f = myform.propic.data
             filename = secure_filename(f.filename)
             f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            
+            ppUrl = url_for('static', filename='pro-pics/'+filename)
+            fname = myform.fname.data
+            lname = myform.lname.data
+            gender = myform.gender.data
+            email = myform.email.data
+            location = myform.location.data
+            biography = myform.biography.data
+            
+            new = UserProfile(fname, lname, gender, email, location, biography, ppUrl)
+            
+            db.session.add(me)
+            db.session.commit()
+            
             flash('File Saved', 'success')
+            return render_template('profiles.html')
+            
     return render_template('profile.html', form = myform)
 #, joined=format_date_joined(datetime.datetime.now())
 
