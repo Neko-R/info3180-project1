@@ -24,6 +24,7 @@ def home():
 @app.route('/about')
 def about():
     """Render the website's about page."""
+    flash('Nothing in the About at this moment ... ', 'success')
     return render_template('about.html')
 
 @app.route('/profile', methods=['POST', 'GET'])
