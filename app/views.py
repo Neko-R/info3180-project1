@@ -18,7 +18,7 @@ import os
 ###
 @app.route('/')
 def home():
-    flash('Hello!.\nTo begin, you may click 'Profile' above to add a new profile.', 'success')
+    flash('Hello!.\nTo begin, you may click Profile above to add a new profile.', 'success')
     return render_template('home.html')
     
 @app.route('/about')
