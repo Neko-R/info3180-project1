@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="box">
+    <div>
+        <h1>Add Profile</h1>
+        <form class="newProfile" action="{{ url_for('profile') }}" method="post" enctype="multipart/form-data">
+            <div>
+                {{ form.csrf_token }}
+                <div class="fieldSection">
+                    <h6 class="label">{{ form.fname.label }} </h6>
+                    {{ form.fname(class="input", size=20) }}
+                </div>
+                
+                <div class="fieldSection">
+                    <h6 class="label">{{ form.lname.label }} </h6>
+                    {{ form.lname(class="input", size=20) }}
+                </div>
+        
+                <div class="fieldSection">
+                    <h6 class="label">{{ form.gender.label }} </h6>
+                    {{ form.gender(class="input") }}
+                </div>
+        
+                <div  class="fieldSection">
+                    <h6 class="label">{{ form.email.label }} </h6> 
+                    {{ form.email(class="input") }}
+                </div>
+        
+                <div class="fieldSection">
+                    <h6 class="label">{{ form.location.label }} </h6>
+                    {{ form.location(class="input", size=100) }}
+                </div>
+                
+                <div  class="fieldSection">
+                    <h6 class="label">{{ form.biography.label }} </h6>
+                    {{ form.biography(class="input biography") }}
+                </div>
+        
+                <div  class="fieldSection">
+                    <h6 class="label"> {{ form.propic.label }}</h6>
+                    {{ form.propic(class="upload",value="Browse") }}
+                </div>
+        
+                <div  class="fieldSection">
+                {{form.submit(value="Add Profile")}}
+                </div>
+            </div>
+            
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}
