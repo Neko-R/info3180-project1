@@ -11,62 +11,63 @@ from models import UserProfile
 from werkzeug.utils import secure_filename
 import datetime
 from .forms import *
+import os
 
 ###
 # Routing for your application.
 ###
 @app.route('/')
+def home():
+    flash('Hello!.\nTo begin, you may click profile above to add a new profile.', 'success')
+    return render_template('home.html')
+    
+@app.route('/about')
 def about():
-    return render_template('about.html', name="Neko Reid")
+    """Render the website's about page."""
+    return render_template('about.html')
 
-@app.route('/profile', methods=['POST', 'GET'])
-def profile():
+@app.route('/profile', methods=['POST'])
+@app.route('/profile/<userid>', methods=['GET'])
+def profile(userid=None):
     myform = addProfile()
     # Validate file upload on submit
-    if request.method == 'POST':
-        if myform.validate_on_submit():
-            f = myform.propic.data
-            filename = secure_filename(f.filename)
-            f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            
-            ppUrl = url_for('static', filename='pro-pics/'+filename)
-            fname = myform.fname.data
-            lname = myform.lname.data
-            gender = myform.gender.data
-            email = myform.email.data
-            location = myform.location.data
-            biography = myform.biography.data
-            
-            new = UserProfile(fname, lname, gender, email, location, biography, ppUrl)
-            
-            db.session.add(me)
-            db.session.commit()
-            
-            flash('File Saved', 'success')
-            return render_template('profiles.html')
+    if request.method == 'POST' and myform.validate_on_submit():
+        fname = myform.fname.data
+        lname = myform.lname.data
+        gender = myform.gender.data
+        email = myform.email.data
+        location = myform.location.data
+        biography = myform.biography.data
+        
+        new = UserProfile(fname, lname, gender, email, location, biography)
+
+        db.session.add(new)
+        db.session.commit()
+        
+        propic = myform.propic.data
+
+        propic.save(os.path.join(app.config['UPLOAD_FOLDER'], new.get_id()))
+        new.updateProPic( 'pro-pics/'+ new.get_id() )
+        db.session.commit()
+        
+        flash('Profile Successfully Added', 'success')
+        return redirect(url_for('profiles'))
+    elif request.method == 'GET':
+        u = UserProfile.query.filter_by(id=int(userid)).first_or_404()
+        return render_template('user.html', user=u)
             
     return render_template('profile.html', form = myform)
-#, joined=format_date_joined(datetime.datetime.now())
 
 @app.route('/profiles')
 def profiles():
     """Render website's profiles page."""
-    return render_template('profiles.html')
+    userslst = UserProfile.query.all()
+    return render_template('profiles.html', users=userslst)
 
 
 ###
 # The functions below should be applicable to all Flask apps.
 ###
-
-def format_date_joined(date):
-    return  date.strftime("%B, %Y") 
-
-@app.route('/<file_name>.txt')
-def send_text_file(file_name):
-    """Send your static text file."""
-    file_dot_text = file_name + '.txt'
-    return app.send_static_file(file_dot_text)
-
 
 @app.after_request
 def add_header(response):
@@ -78,7 +79,6 @@ def add_header(response):
     response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
     response.headers['Cache-Control'] = 'public, max-age=0'
     return response
-
 
 @app.errorhandler(404)
 def page_not_found(error):

@@ -1,10 +1,37 @@
 {% extends "base.html" %}
 
+{% include 'flash_messages.html' %}
 {% block main %}
 
-{% include 'flash_messages.html' %}
-
-
-
+    <div class="box">
+        <div>
+             <h1> Profiles </h1>
+             {% for user in users %}
+                <div class="proCard">
+                    <img class="proPic" src="{{ url_for('static', filename=user.propic ) }}" >
+                    <div class="info">
+                        <div>
+                            <h5>{{user.first_name}} {{user.last_name}}</h5>
+                        </div>
+                        <div>
+                            {% if user.gender=="F" %}
+                                <h6><img src="https://img.icons8.com/ios/20/000000/person-female.png"> Female</h6>
+                            {% else %}
+                                <h6><img src="https://img.icons8.com/windows/20/000000/person-male.png"> Male</h6>
+                            {% endif%}
+                        </div>
+                        <div>
+                            <h6><img src="https://img.icons8.com/ios/20/000000/marker.png"> {{user.location}}</h6>
+                        </div>
+                    </div>
+                    <div class="viewBut">
+                        <button class="green" onclick=window.location.href="{{ url_for('profile', userid=user.id) }}" >View Profile</button>
+                    </div>
+                    
+                </div>
+            {% endfor %}
+        </div>
+        
+    </div>
 
 {% endblock %}

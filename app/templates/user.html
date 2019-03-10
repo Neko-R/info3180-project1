@@ -2,33 +2,38 @@
 
 {% block main %}
 
-<div class="enclose">
-    <div class="card">
-            <div class="display">
-                <img class="proPic" src="{{ url_for('static', filename='img/pro.jpg') }}">
-                <div class="basic">
-                    <h5 class="text">Neko S. C. Reid</h4>
-                    <p class="text">@nreid</p>
-                    <p class="text">Kingston, Jamaica</p>
-                    <p class="text">Joined {{joined}}</p>
-                </div>
+<div class="box">
+    <div class="userCard">
+        <div class="pic">
+            <img class="proPic" src="{{ url_for('static', filename=user.propic) }}">
+        </div>
+        
+        <div class="userInfo">
+            <div>
+                <h5>{{user.first_name}} {{user.last_name}}</h5>    
             </div>
-            <div class="bio">
-                <div class="top">
-                    <p>I am a Computer Science student at The University of The West Indies, Mona, Jamaica. 
-                        I am a Christian, a follower of Christ. I enjoy watching videos from my subscribed YouTube channels.
-                        I also love animals; I find them cute. Sometimes I like to just think and question stuff.</p>
-                </div>
-                <div class="mid">
-                    <div class="stat"> <h5 class="num">7</h5> <p class="tag">Posts</p> </div> 
-                    <div class="stat"> <h5 class="num">100</h5> <p class="tag">Following</p> </div> 
-                    <div class="stat"> <h5 class="num">250</h5> <p class="tag">Followers</p> </div>
-                </div>
-                <div class="bttm">
-                    <button class="fbutton"><strong>Follow</strong></button>
-                </div>
-
+            <div>
+                 <h6><img src="https://img.icons8.com/ios/20/000000/secured-letter.png"> {{user.email}} </h6>     
             </div>
+            <div>
+                <h6><img src="https://img.icons8.com/ios/20/000000/marker.png"> {{user.location}} </h6>    
+            </div>
+            <div>
+                <h6><img src="https://img.icons8.com/dotty/20/000000/calendar.png"> Joined on {{user.created_on.strftime("%B %d, %Y")}} </h6>    
+            </div>
+        </div>
+        <div class="bio">
+            <h6>About Me</h6>
+            <p>{{user.biography}}</p>
+        </div>
+        <div class="send">
+            <button class="green">Send Message</button>
+        </div>
+        
+        <div class="follow">
+            <button class="blue">Follow</button>
+        </div>
+            
     </div>
 </div>
 {% endblock %}

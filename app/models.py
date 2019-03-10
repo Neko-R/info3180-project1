@@ -1,6 +1,6 @@
 from app import db
 import datetime
-
+from sqlalchemy import DateTime
 
 class UserProfile(db.Model):
     # You can use this to change the table name. The default convention is to use
@@ -22,30 +22,22 @@ class UserProfile(db.Model):
     
     biography = db.Column(db.Text)
     
-    propic = email = db.Column(db.String(1000))
+    propic =  db.Column(db.String(1000))
     
-    created_on = db.Column(DateTime, default=datetime.datetime.now)
+    created_on = db.Column(DateTime, default=datetime.datetime.now().strftime("%B %d, %Y") )
 
-    def __init__(self, first_name, last_name, gender, email, location, biography, propic):
+    def __init__(self, first_name, last_name, gender, email, location, biography):
         self.first_name = first_name
         self.last_name = last_name
         self.gender = gender
         self.email = email
         self.location = location
         self.biography = biography
-        self.propic = propic
         
         #generate_password_hash(password, method='pbkdf2:sha256')
         
-
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
+    def updateProPic(self, propic):
+        self.propic = propic
 
     def get_id(self):
         try:
