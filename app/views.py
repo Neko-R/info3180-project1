@@ -26,7 +26,7 @@ def about():
     """Render the website's about page."""
     return render_template('about.html')
 
-@app.route('/profile', methods=['POST'])
+@app.route('/profile', methods=['POST', 'GET'])
 @app.route('/profile/<userid>', methods=['GET'])
 def profile(userid=None):
     myform = addProfile()
@@ -52,7 +52,7 @@ def profile(userid=None):
         
         flash('Profile Successfully Added', 'success')
         return redirect(url_for('profiles'))
-    elif request.method == 'GET':
+    elif request.method == 'GET' and userid != None:
         u = UserProfile.query.filter_by(id=int(userid)).first_or_404()
         return render_template('user.html', user=u)
             
